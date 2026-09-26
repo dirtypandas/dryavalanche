@@ -23,7 +23,10 @@ body{background:#D8C29C}
 #frame{position:relative;margin:22px;height:calc(100vh - 44px);height:calc(100dvh - 44px);min-height:0;display:flex;flex-direction:column;padding:6px;background:#EAD9B8;border-radius:8px}
 #dots{position:absolute;inset:6px;border-radius:3px;pointer-events:none;background-image:radial-gradient(#0e0d0b 1.4px,transparent 1.6px);background-size:9px 9px;opacity:.1}
 #edge{position:absolute;inset:0;border:6px solid #0e0d0b;border-radius:8px;pointer-events:none}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 20px;background:#E0834A;position:relative;min-height:64px;font-size:15px;letter-spacing:.12em}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:nowrap;padding:12px 20px;background:#E0834A;position:relative;min-height:64px;font-size:15px;letter-spacing:.12em}
+.barItem{white-space:nowrap}
+.barSide{display:flex;gap:20px;align-items:center;flex:none}
+.recWrap{display:flex;gap:8px;align-items:center}
 #top{border-bottom:6px solid #0e0d0b;border-radius:3px 3px 0 0}
 #bot{border-top:6px solid #0e0d0b;border-radius:0 0 3px 3px}
 #stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,3vh,44px);padding:clamp(10px,3vh,40px) 20px}
@@ -50,6 +53,13 @@ body{background:#D8C29C}
 #boot{position:absolute;inset:0;background:#0e0d0b;color:#EAD9B8;padding:48px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:17px;letter-spacing:.14em;pointer-events:none;opacity:1;transition:opacity 180ms}
 .bootline{opacity:0}
 #caretBlock{width:14px;height:22px;background:#EAD9B8;opacity:.15}
+@media (max-width:600px){
+ .bar{letter-spacing:0;padding:0 12px;gap:8px;min-height:48px;height:48px;flex:none;font-size:clamp(10px,3.2vw,15px)}
+ .barSide{gap:10px}.recWrap{gap:5px}
+ #rec{width:9px;height:9px}
+ #reboot{font-size:clamp(10px,3vw,14px);padding:4px 8px;border-width:2px;letter-spacing:0;line-height:1}
+}
+@media (max-width:500px){ .lbl{display:none} }
 @media (prefers-reduced-motion:reduce){#mark,#tileEdge,#ready{transition:none}}
 </style>
 </head>
@@ -64,10 +74,10 @@ body{background:#D8C29C}
     <div id="edge"></div>
 
     <div class="bar" id="top">
-      <div>DA-ROVER TERMINAL // UNIT 14</div>
-      <div style="display:flex;gap:20px;align-items:center">
-        <span>SOL 5150</span>
-        <span style="display:flex;gap:8px;align-items:center"><span id="rec"></span>REC</span>
+      <div class="barItem">DA-ROVER TERMINAL // UNIT 14</div>
+      <div class="barSide">
+        <span class="barItem">SOL 5150</span>
+        <span class="recWrap barItem"><span id="rec"></span>REC</span>
       </div>
     </div>
 
@@ -99,9 +109,9 @@ body{background:#D8C29C}
     </div>
 
     <div class="bar" id="bot">
-      <div>LAT 4.5895°S · LON 137.4417°E</div>
-      <div style="display:flex;gap:20px;align-items:center">
-        <span id="clock">LMST 00:00:00</span>
+      <div class="barItem"><span class="lbl">LAT </span>4.5895°S · <span class="lbl">LON </span>137.4417°E</div>
+      <div class="barSide">
+        <span class="barItem"><span class="lbl">LMST </span><span id="clock">00:00:00</span></span>
         <button id="reboot" type="button">REBOOT</button>
       </div>
     </div>
@@ -191,7 +201,7 @@ body{background:#D8C29C}
 
     recEl.style.opacity = blink ? 1 : .15;
     var d = new Date(now);
-    clockEl.textContent = "LMST " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+    clockEl.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
   }
 
   function run() {
